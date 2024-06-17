@@ -3,6 +3,7 @@ import CheapestFlights from "./CheapestFlights";
 import OtherFlights from "./OtherFlights";
 import FilterBar from "./FilterBar";
 import { useQuery } from "@tanstack/react-query";
+import SearchBarResult from "./SearchBarResult";
 
 const Display = () => {
   const date = new Date();
@@ -20,6 +21,7 @@ const Display = () => {
   const [travelClass, setTravelClass] = useState("ECONOMY");
   const [stops, setStops] = useState("false");
   const [currency, setCurrency] = useState("SGD");
+  const [findingFlights, setFindingFlights] = useState(false);
 
   //fetch token
   const fetchToken = async () => {
@@ -54,6 +56,7 @@ const Display = () => {
   //fetch departing city
 
   const fetchOCity = async () => {
+    console.log(oCity);
     let tempURL = `keyword=${oCity}&max=5&include=AIRPORTS`;
     const res = await fetch(import.meta.env.VITE_CITIES + tempURL, {
       headers: {
@@ -64,12 +67,13 @@ const Display = () => {
     if (!res.ok) {
       throw new Error("fetch o city error");
     }
+    console.log(oCity);
     const data = await res.json();
     return data.included.airports;
   };
 
   const oCityQuery = useQuery({
-    queryKey: ["ocity"],
+    queryKey: ["ocity", oCity],
     queryFn: fetchOCity,
   });
 
@@ -95,38 +99,46 @@ const Display = () => {
     queryFn: fetchDCity,
   });
 
-  console.log(oCityQuery.data);
-  console.log(dCityQuery.data);
-
-  // if (oCityQuery.data) {
-  //   Object.values(oCityQuery.data).map((item) => item);
-  // }
-
   return (
     <div>
-      <p>{token}</p>
+      {/* <p>{token}</p>
       <p>{JSON.stringify(oCityQuery.data)}</p>
-      {/* {oCityQuery.isSuccess && (
-        <p>{JSON.stringify(Object.entries(oCityQuery.data))}</p>
-      )} */}
-      <p>{JSON.stringify(dCityQuery.data)}</p>
+      <p>{JSON.stringify(dCityQuery.data)}</p> */}
       <div>
         <input
+          type="text"
           placeholder="Where from?"
           onChange={(e) => setOCity(e.target.value)}
           value={oCity}
         ></input>
 
-        {/* progress: manage to extract out the different airport names based on city search */}
+        {/* progress: managed to extract out the different airport names based on city search */}
+        {oCityQuery.isFetching && <p>loading...</p>}
         {oCityQuery.isSuccess &&
           Object.values(oCityQuery.data).map((item) => {
-            return <p>{JSON.stringify(item.name)}</p>;
+            return (
+              <p>
+                {item.name} {item.subType} {item.iataCode}
+              </p>
+            );
           })}
+
         <input
+          type="text"
           placeholder="Where to?"
           onChange={(e) => setDCity(e.target.value)}
           value={dCity}
         ></input>
+
+        {dCityQuery.isFetching && <p>loading...</p>}
+        {dCityQuery.isSuccess &&
+          Object.values(dCityQuery.data).map((item) => {
+            return (
+              <p>
+                {item.name} {item.subType} {item.iataCode}
+              </p>
+            );
+          })}
       </div>
 
       <CheapestFlights

@@ -3,14 +3,22 @@ import styles from "./Flight.module.css";
 
 const Flight = (props) => {
   return (
-    <div className={`container ${styles.flight}`}>
-      <div className="row">
-        <div className="col-sm-1">image</div>
-        <div className="col-sm-4">flight timings</div>
-        <div className="col-sm-2">flight duration</div>
-        <div className="col-sm-2">number of stops</div>
-        <div className="col-sm-3">price</div>
+    <div className={styles.container}>
+      <div className={styles.flightdetails}>
+        <div className={styles.depart}>
+          <div className={styles.carrier}></div>
+          <div className={styles.from}></div>
+          <div className={styles.duration}></div>
+          <div className={styles.to}></div>
+        </div>
+        <div className={styles.flightdetails}>
+          <div className={styles.carrier}></div>
+          <div className={styles.from}></div>
+          <div className={styles.duration}></div>
+          <div className={styles.to}></div>
+        </div>
       </div>
+      <div className={styles.pricedetails}></div>
     </div>
   );
 };

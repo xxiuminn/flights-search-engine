@@ -1,0 +1,53 @@
+.banner {
+  background-image: url("../assets/flight-banner.jpg");
+  height: 25em;
+  object-fit: cover;
+}
+
+.searchcontainer {
+  border-width: 0.2em;
+  border: solid;
+  border-radius: 1em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2em;
+  margin-top: 4em;
+  margin-left: 6em;
+  margin-right: 6em;
+  border-color: rgb(237, 237, 237);
+  /* box-shadow: 0em 0.1em 1em rgb(225, 225, 225); */
+}
+
+.searchbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1em;
+  /* padding: 3em 3em 1em 3em; */
+}
+
+input {
+  border-radius: 0.2em;
+  padding: 0.5em;
+  border: solid;
+  border-color: rgb(211, 211, 211);
+}
+
+button {
+  border-radius: 2em;
+  padding: 0.6em;
+  background-color: #4285f4;
+  color: white;
+  border: none;
+}
+
+.dropdown {
+  box-shadow: 0em 0.1em 1em rgb(225, 225, 225);
+  border-radius: 0.2em;
+  border: solid;
+  border-color: rgb(211, 211, 211);
+  padding: 0.5em;
+}

@@ -1,6 +1,10 @@
-.flight {
-  border: solid;
-  border-width: 1px;
-  border-color: black;
-  height: 5rem;
+.container {
+  display: grid;
+  align-content: center;
+  grid-template-columns: 3fr 1fr;
+}
+
+.flightdetails {
+  display: grid;
+  justify-content: space-around;
 }

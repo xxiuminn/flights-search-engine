@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import CheapestFlights from "./CheapestFlights";
-import OtherFlights from "./OtherFlights";
-import FilterBar from "./FilterBar";
 import { useQuery } from "@tanstack/react-query";
 import SearchBarResult from "./SearchBarResult";
+import styles from "./Display.module.css";
 
 const Display = () => {
   const date = new Date();
@@ -22,6 +21,9 @@ const Display = () => {
   const [stops, setStops] = useState("false");
   const [currency, setCurrency] = useState("SGD");
   const [findingFlights, setFindingFlights] = useState(false);
+  const [enableClick, setEnableClick] = useState(false);
+  const [oDropdown, setODropdown] = useState(false);
+  const [dDropdown, setDDropdown] = useState(false);
 
   //fetch token
   const fetchToken = async () => {
@@ -56,7 +58,6 @@ const Display = () => {
   //fetch departing airport by city search
 
   const fetchOCity = async () => {
-    console.log(oCity);
     let tempURL = `keyword=${oCity}&max=5&include=AIRPORTS`;
     const res = await fetch(import.meta.env.VITE_CITIES + tempURL, {
       headers: {
@@ -75,6 +76,7 @@ const Display = () => {
   const oCityQuery = useQuery({
     queryKey: ["ocity", oCity],
     queryFn: fetchOCity,
+    enabled: false,
   });
 
   //fetch arrival airport by city search
@@ -97,48 +99,130 @@ const Display = () => {
   const dCityQuery = useQuery({
     queryKey: ["dcity", dCity],
     queryFn: fetchDCity,
+    enabled: false,
   });
 
+  //fetch country for autofill
+  // const autofill = async () => {
+  //   const res = await fetch(import.meta.env.VITE_AIRTABLE, {
+  //     headers: {
+  //       Authorization:
+  //         "Bearer " +
+  //         import.meta.env.VITE_ATTOKEN +
+  //         "?maxRecords=3&view=Grid%20view",
+  //     },
+  //   });
+  //   if (!res.ok) {
+  //     throw new Error("error fetching user's language");
+  //   }
+  //   const data = await res.json();
+  //   return data;
+  // };
+
+  // const autofillQuery = useQuery({
+  //   queryKey: ["autofill"],
+  //   queryFn: autofill,
+  // });
+
+  // console.log(autofillQuery.data);
+
+  //search click which will fetch results
+  const handleSearch = () => {
+    setEnableClick(!enableClick);
+  };
+
+  //current progress here:
+  //click on drop down option
+  const selectOLocation = (code) => {
+    setOLocation(code);
+    setODropdown(false);
+    // need to autofill input to country
+  };
+
   return (
-    <div>
-      {/* <p>{token}</p>
-      <p>{JSON.stringify(oCityQuery.data)}</p>
-      <p>{JSON.stringify(dCityQuery.data)}</p> */}
-      <div>
-        <input
-          type="text"
-          placeholder="Where from?"
-          onChange={(e) => setOCity(e.target.value)}
-          value={oCity}
-        ></input>
-
-        {/* progress: managed to extract out the different airport names based on city search */}
-        {oCityQuery.isFetching && <p>loading...</p>}
-        {oCityQuery.isSuccess &&
-          Object.values(oCityQuery.data).map((item) => {
-            return (
-              <div onClick={() => console.log(item.iataCode)}>
-                {item.name} {item.subType} {item.iataCode}
+    <>
+      <div className={styles.banner}></div>
+      <div className={styles.searchcontainer}>
+        <div className={styles.searchbar}>
+          <div>
+            <div>
+              <label>From</label>
+              <input
+                type="text"
+                placeholder="Where from?"
+                onClick={() => setODropdown(true)}
+                onChange={(e) => setOCity(e.target.value)}
+                value={oCity}
+              ></input>
+            </div>
+            {oDropdown && (
+              <div className={styles.dropdown}>
+                {oCityQuery.isFetching && <p>loading...</p>}
+                {oCityQuery.isSuccess &&
+                  Object.values(oCityQuery.data).map((item) => {
+                    return (
+                      <div onClick={() => selectOLocation(item.iataCode)}>
+                        {item.name} {item.subType} {item.iataCode}
+                      </div>
+                    );
+                  })}
               </div>
-            );
-          })}
+            )}
+            <div>{oLocation}</div>
+          </div>
 
-        <input
-          type="text"
-          placeholder="Where to?"
-          onChange={(e) => setDCity(e.target.value)}
-          value={dCity}
-        ></input>
+          <div>
+            <div>
+              <label>To</label>
+              <input
+                type="text"
+                placeholder="Where to?"
+                onChange={(e) => setDCity(e.target.value)}
+                value={dCity}
+              ></input>
+            </div>
+            <div className={styles.dropdown}>
+              {dCityQuery.isFetching && <p>loading...</p>}
+              {dCityQuery.isSuccess &&
+                Object.values(dCityQuery.data).map((item) => {
+                  return (
+                    <div onClick={() => setDLocation(item.iataCode)}>
+                      {item.name} {item.subType} {item.iataCode}
+                    </div>
+                  );
+                })}
+            </div>
 
-        {dCityQuery.isFetching && <p>loading...</p>}
-        {dCityQuery.isSuccess &&
-          Object.values(dCityQuery.data).map((item) => {
-            return (
-              <div onClick={() => console.log(item.iataCode)}>
-                {item.name} {item.subType} {item.iataCode}
-              </div>
-            );
-          })}
+            <div>{dLocation}</div>
+          </div>
+
+          <div>
+            <label>Depart</label>
+            <input
+              type="date"
+              placeholder="YYYY-MM-DD"
+              onChange={(e) => {
+                setDepDate(e.target.value);
+              }}
+              value={depDate}
+            ></input>
+          </div>
+
+          <div>
+            <label> Return</label>
+            <input
+              className={styles.datePicker}
+              type="date"
+              placeholder="YYYY-MM-DD"
+              onChange={(e) => {
+                setRetDate(e.target.value);
+              }}
+              value={retDate}
+            ></input>
+          </div>
+        </div>
+
+        <button onClick={handleSearch}>Search flights</button>
       </div>
 
       <CheapestFlights
@@ -151,9 +235,10 @@ const Display = () => {
         travelClass={travelClass}
         stops={stops}
         currency={currency}
+        enableClick={enableClick}
+        handleSearch={handleSearch}
       />
-      <OtherFlights />
-    </div>
+    </>
   );
 };
 

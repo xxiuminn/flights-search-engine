@@ -53,7 +53,7 @@ const Display = () => {
     fetchToken();
   }, []);
 
-  //fetch departing city
+  //fetch departing airport by city search
 
   const fetchOCity = async () => {
     console.log(oCity);
@@ -77,7 +77,7 @@ const Display = () => {
     queryFn: fetchOCity,
   });
 
-  //fetch arrival city
+  //fetch arrival airport by city search
 
   const fetchDCity = async () => {
     let tempURL = `keyword=${dCity}&max=5&include=AIRPORTS`;
@@ -95,7 +95,7 @@ const Display = () => {
   };
 
   const dCityQuery = useQuery({
-    queryKey: ["dcity"],
+    queryKey: ["dcity", dCity],
     queryFn: fetchDCity,
   });
 
@@ -117,9 +117,9 @@ const Display = () => {
         {oCityQuery.isSuccess &&
           Object.values(oCityQuery.data).map((item) => {
             return (
-              <p>
+              <div onClick={() => console.log(item.iataCode)}>
                 {item.name} {item.subType} {item.iataCode}
-              </p>
+              </div>
             );
           })}
 
@@ -134,9 +134,9 @@ const Display = () => {
         {dCityQuery.isSuccess &&
           Object.values(dCityQuery.data).map((item) => {
             return (
-              <p>
+              <div onClick={() => console.log(item.iataCode)}>
                 {item.name} {item.subType} {item.iataCode}
-              </p>
+              </div>
             );
           })}
       </div>

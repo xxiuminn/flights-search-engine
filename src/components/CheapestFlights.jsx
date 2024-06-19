@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Flight from "./Flight";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import styles from "./CheapestFlights.module.css";
 import CheapestFlightsCard from "./CheapestFlightsCard";

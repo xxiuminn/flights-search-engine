@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import CheapestFlights from "./CheapestFlights";
 import { useQuery } from "@tanstack/react-query";
-import SearchBarResult from "./SearchBarResult";
 import styles from "./Display.module.css";
+import Favourites from "./Favourites";
 
 const Display = () => {
   const date = new Date();
@@ -24,6 +24,7 @@ const Display = () => {
   const [enableClick, setEnableClick] = useState(false);
   const [oDropdown, setODropdown] = useState(false);
   const [dDropdown, setDDropdown] = useState(false);
+  const [savedFlights, setSavedFlights] = useState([]);
 
   //fetch token
   const fetchToken = async () => {
@@ -174,6 +175,13 @@ const Display = () => {
     }
   };
 
+  // save flights
+  const saved = (item) => {
+    setSavedFlights((prevState) => {
+      return [...prevState, item];
+    });
+  };
+
   return (
     <>
       <div className={styles.banner}></div>
@@ -218,18 +226,19 @@ const Display = () => {
                 onClick={() => setDDropdown(true)}
               ></input>
             </div>
-            <div className={styles.dropdown}>
-              {dCityQuery.isFetching && <p>loading...</p>}
-              {dCityQuery.isSuccess &&
-                Object.values(dCityQuery.data).map((item) => {
-                  return (
-                    <div onClick={() => selectDLocation(item.iataCode)}>
-                      {item.name} {item.subType} {item.iataCode}
-                    </div>
-                  );
-                })}
-            </div>
-
+            {dDropdown && (
+              <div className={styles.dropdown}>
+                {dCityQuery.isFetching && <p>loading...</p>}
+                {dCityQuery.isSuccess &&
+                  Object.values(dCityQuery.data).map((item) => {
+                    return (
+                      <div onClick={() => selectDLocation(item.iataCode)}>
+                        {item.name} {item.subType} {item.iataCode}
+                      </div>
+                    );
+                  })}
+              </div>
+            )}
             <div>{dLocation}</div>
           </div>
 
@@ -274,7 +283,11 @@ const Display = () => {
         currency={currency}
         enableClick={enableClick}
         handleSearch={handleSearch}
+        saved={saved}
+        savedFlights={savedFlights}
       />
+      {/* 
+      <Favourites savedFlights={savedFlights} /> */}
     </>
   );
 };

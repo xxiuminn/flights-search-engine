@@ -45,4 +45,21 @@
   display: grid;
   align-content: center;
   justify-content: center;
+  justify-items: center;
+}
+
+.buttonSave {
+  border-radius: 2em;
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  margin-top: 1em;
+}
+
+.buttonSaved {
+  border-radius: 2em;
+  background-color: #00122f;
+  color: white;
+  border: none;
+  margin-top: 1em;
 }

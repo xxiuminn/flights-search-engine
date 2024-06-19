@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Flight from "./Flight";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import styles from "./CheapestFlights.module.css";
+import CheapestFlightsCard from "./CheapestFlightsCard";
 
 const CheapestFlights = (props) => {
   const queryClient = useQueryClient();
@@ -36,6 +37,11 @@ const CheapestFlights = (props) => {
     enabled: props.enableClick,
   });
 
+  const clickSave = (item) => {
+    console.log(item);
+    props.saved(item);
+  };
+
   return (
     <div className={styles.searchResult}>
       {/* <h2>
@@ -46,44 +52,13 @@ const CheapestFlights = (props) => {
       {query.isSuccess &&
         query.data.map((item) => {
           return (
-            <div className={styles.container}>
-              <div className={styles.flightdetails}>
-                <div className={styles.flight}>
-                  <div className={styles.carrier}>
-                    {item.itineraries[0].segments[0].carrierCode}
-                  </div>
-                  <div className={styles.tofro}>
-                    {item.itineraries[0].segments[0].departure.at
-                      .split("T")[1]
-                      .slice(0, 5)}{" "}
-                    -{" "}
-                    {item.itineraries[0].segments[0].arrival.at
-                      .split("T")[1]
-                      .slice(0, 5)}
-                  </div>
-                  <div className={styles.duration}>
-                    {item.itineraries[0].duration.slice(2)}
-                  </div>
-                  <div className={styles.stops}>
-                    {item.itineraries[0].segments[0].numberOfStops}
-                  </div>
-                </div>
-                <div className={styles.flight}>
-                  <div className={styles.carrier}>Airline</div>
-                  <div className={styles.from}>
-                    {props.oLocation} - {props.dLocation}
-                  </div>
-                  <div className={styles.duration}>Duration</div>
-                  <div className={styles.to}>Stops</div>
-                </div>
-              </div>
-              <div className={styles.pricedetails}>
-                <div>
-                  {item.price.currency} ${item.price.base}
-                </div>
-                <div>{item.price.oneWay ? "One Way" : "Round Trip"}</div>
-              </div>
-            </div>
+            <>
+              <CheapestFlightsCard
+                item={item}
+                handleSave={props.saved}
+                savedFlights={props.savedFlights}
+              ></CheapestFlightsCard>
+            </>
           );
         })}
     </div>

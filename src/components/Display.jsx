@@ -24,7 +24,9 @@ const Display = () => {
   const [enableClick, setEnableClick] = useState(false);
   const [oDropdown, setODropdown] = useState(false);
   const [dDropdown, setDDropdown] = useState(false);
-  const [savedFlights, setSavedFlights] = useState([]);
+  // const [savedFlights, setSavedFlights] = useState([
+  //   { carrier: "", dep: "", arr: "", duration: "" },
+  // ]);
 
   //fetch token
   const fetchToken = async () => {
@@ -175,13 +177,6 @@ const Display = () => {
     }
   };
 
-  // save flights
-  const saved = (item) => {
-    setSavedFlights((prevState) => {
-      return [...prevState, item];
-    });
-  };
-
   return (
     <>
       <div className={styles.banner}></div>
@@ -283,8 +278,8 @@ const Display = () => {
         currency={currency}
         enableClick={enableClick}
         handleSearch={handleSearch}
-        saved={saved}
-        savedFlights={savedFlights}
+        // saved={saved}
+        // savedFlights={savedFlights}
       />
       {/* 
       <Favourites savedFlights={savedFlights} /> */}

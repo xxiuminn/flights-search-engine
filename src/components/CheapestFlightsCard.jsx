@@ -3,20 +3,10 @@ import styles from "./CheapestFlights.module.css";
 import React, { useState } from "react";
 
 const CheapestFlightsCard = (props) => {
-  const { item, handleSave } = props;
+  const { item, savedFlights, oLocation, dLocation } = props;
   const [isSaved, setIsSaved] = useState(false);
-  // const [carrier, setCarrier] = useState(props.savedFlights);
-  const [carrier, setCarrier] = useState("");
-  const [departure, setDeparture] = useState("");
-  const [arrival, setArrival] = useState("");
-  const [duration, setDuration] = useState("");
-  const [stops, setStops] = useState("");
-  const [price, setPrice] = useState("");
-  const [currency, setCurrency] = useState("");
-  const [oneWay, setOneWay] = useState("");
 
-  console.log(props.savedFlights);
-
+  //add saved flights
   const addSave = async () => {
     console.log("posting");
     const res = await fetch(import.meta.env.VITE_AIRTABLE, {
@@ -29,15 +19,18 @@ const CheapestFlightsCard = (props) => {
         records: [
           {
             fields: {
-              duration: duration,
-              departure: departure,
-              //carrier is now an empty array. please fix.
-              carrier: carrier,
-              stops: stops,
-              price: price,
-              arrival: arrival,
-              oneWay: oneWay,
-              currency: currency,
+              duration: item.itineraries[0].duration.slice(2),
+              departure: item.itineraries[0].segments[0].departure.at
+                .split("T")[1]
+                .slice(0, 5),
+              carrier: item.itineraries[0].segments[0].carrierCode,
+              stops: `${item.itineraries[0].segments[0].numberOfStops}`,
+              price: item.price.base,
+              arrival: item.itineraries[0].segments[0].arrival.at
+                .split("T")[1]
+                .slice(0, 5),
+              oneWay: `${item.oneWay}`,
+              currency: item.price.currency,
             },
           },
         ],
@@ -52,17 +45,11 @@ const CheapestFlightsCard = (props) => {
     mutationFn: addSave,
     onSuccess: () => {
       setIsSaved(!isSaved);
-      // setCarrier(props.savedFlights);
       queryClient.invalidateQueries(["saveflight"]);
     },
   });
 
-  // const clickSave = (item) => {
-  //   // handleSave(item);
-  //   setIsSaved(!isSaved);
-  //   setCarrier(props.savedFlights);
-  //   mutation.mutate;
-  // };
+  // fetch saved flights
 
   return (
     <>
@@ -91,7 +78,7 @@ const CheapestFlightsCard = (props) => {
           <div className={styles.flight}>
             <div className={styles.carrier}>Airline</div>
             <div className={styles.from}>
-              {props.oLocation} - {props.dLocation}
+              {oLocation} - {dLocation}
             </div>
             <div className={styles.duration}>Duration</div>
             <div className={styles.to}>Stops</div>
@@ -101,21 +88,17 @@ const CheapestFlightsCard = (props) => {
           <div>
             {item.price.currency} ${item.price.base}
           </div>
-          <div>{item.price.oneWay ? "One Way" : "Round Trip"}</div>
+          <div>{item.oneWay ? "One Way" : "Round Trip"}</div>
 
           {!isSaved ? (
-            <button
-              className={styles.buttonSave}
-              // onClick={() => clickSave(item)}
-              onClick={mutation.mutate}
-            >
+            <button className={styles.buttonSave} onClick={mutation.mutate}>
               Save
             </button>
           ) : (
             <button
               className={styles.buttonSaved}
               // onClick={() => clickSave(item)}
-              onClick={mutation.mutate}
+              // onClick={mutation.mutate}
             >
               Saved
             </button>

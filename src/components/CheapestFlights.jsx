@@ -7,7 +7,20 @@ import CheapestFlightsCard from "./CheapestFlightsCard";
 const CheapestFlights = (props) => {
   const queryClient = useQueryClient();
   const [data, setData] = useState([]);
+  const [savedFlights, setSavedFlights] = useState([
+    {
+      carrier: "",
+      dep: "",
+      arr: "",
+      duration: "",
+      stops: "",
+      currency: "",
+      oneWay: "",
+      price: "",
+    },
+  ]);
 
+  console.log(savedFlights);
   // let tempURL = `originLocationCode=${props.oLocation}&destinationLocationCode=${props.dLocation}&departureDate=${props.depDate}&returnDate=${props.retDate}&adults=${props.adults}&travelClass=${props.travelClass}&nonStop=${props.stops}&currencyCode=${props.currency}&max=5`;
 
   //fetch flight results
@@ -37,10 +50,10 @@ const CheapestFlights = (props) => {
     enabled: props.enableClick,
   });
 
-  const clickSave = (item) => {
-    console.log(item);
-    props.saved(item);
-  };
+  // const clickSave = (item) => {
+  //   console.log(item);
+  //   props.saved(item);
+  // };
 
   return (
     <div className={styles.searchResult}>
@@ -55,8 +68,10 @@ const CheapestFlights = (props) => {
             <>
               <CheapestFlightsCard
                 item={item}
-                handleSave={props.saved}
-                savedFlights={props.savedFlights}
+                // handleSave={props.saved}
+                savedFlights={savedFlights}
+                oLocation={props.oLocation}
+                dLocation={props.dLocation}
               ></CheapestFlightsCard>
             </>
           );

@@ -10,10 +10,10 @@ const Display = () => {
   let defDepDate = date.toISOString().split("T")[0];
   let defRetDate = date.toISOString().split("T")[0];
   const [token, setToken] = useState("");
-  const [oLocation, setOLocation] = useState("SIN");
-  const [dLocation, setDLocation] = useState("BKK");
-  const [oCity, setOCity] = useState("Singapore");
-  const [dCity, setDCity] = useState("Bangkok");
+  const [oLocation, setOLocation] = useState("");
+  const [dLocation, setDLocation] = useState("");
+  const [oCity, setOCity] = useState("");
+  const [dCity, setDCity] = useState("");
   const [depDate, setDepDate] = useState(defDepDate);
   const [retDate, setRetDate] = useState(defRetDate);
   const [adults, setAdults] = useState("1");
@@ -102,41 +102,76 @@ const Display = () => {
     enabled: false,
   });
 
-  //fetch country for autofill
-  // const autofill = async () => {
-  //   const res = await fetch(import.meta.env.VITE_AIRTABLE, {
-  //     headers: {
-  //       Authorization:
-  //         "Bearer " +
-  //         import.meta.env.VITE_ATTOKEN +
-  //         "?maxRecords=3&view=Grid%20view",
-  //     },
-  //   });
-  //   if (!res.ok) {
-  //     throw new Error("error fetching user's language");
-  //   }
-  //   const data = await res.json();
-  //   return data;
-  // };
+  // fetch cities for autofill
 
-  // const autofillQuery = useQuery({
-  //   queryKey: ["autofill"],
-  //   queryFn: autofill,
-  // });
+  const oautofill = async () => {
+    let tempURL = `keyword=${oCity}&max=1&include=AIRPORTS`;
+    const res = await fetch(import.meta.env.VITE_CITIES + tempURL, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!res.ok) {
+      throw new Error("fetch oautofill error");
+    }
+    console.log(oCity);
+    const data = await res.json();
+    return data.data[0];
+  };
 
-  // console.log(autofillQuery.data);
+  const oautofillQuery = useQuery({
+    queryKey: ["oautofill", oCity],
+    queryFn: oautofill,
+    enabled: false,
+  });
+
+  const dautofill = async () => {
+    let tempURL = `keyword=${dCity}&max=1&include=AIRPORTS`;
+    const res = await fetch(import.meta.env.VITE_CITIES + tempURL, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!res.ok) {
+      throw new Error("fetch dautofill error");
+    }
+    console.log(oCity);
+    const data = await res.json();
+    return data.data[0];
+  };
+
+  const dautofillQuery = useQuery({
+    queryKey: ["dautofill", oCity],
+    queryFn: dautofill,
+    enabled: false,
+  });
 
   //search click which will fetch results
   const handleSearch = () => {
     setEnableClick(!enableClick);
   };
 
-  //current progress here:
-  //click on drop down option
+  //click on drop down option (iataCode) => returns city name.
   const selectOLocation = (code) => {
     setOLocation(code);
     setODropdown(false);
     // need to autofill input to country
+    if (code === oautofillQuery.data.iataCode) {
+      console.log(oautofillQuery.data.name);
+      return setOCity(oautofillQuery.data.name);
+    }
+  };
+
+  const selectDLocation = (code) => {
+    setDLocation(code);
+    setDDropdown(false);
+    // need to autofill input to country
+    if (code === dautofillQuery.data.iataCode) {
+      console.log(dautofillQuery.data.name);
+      return setDCity(dautofillQuery.data.name);
+    }
   };
 
   return (
@@ -147,12 +182,13 @@ const Display = () => {
           <div>
             <div>
               <label>From</label>
+
               <input
                 type="text"
                 placeholder="Where from?"
-                onClick={() => setODropdown(true)}
                 onChange={(e) => setOCity(e.target.value)}
                 value={oCity}
+                onClick={() => setODropdown(true)}
               ></input>
             </div>
             {oDropdown && (
@@ -179,6 +215,7 @@ const Display = () => {
                 placeholder="Where to?"
                 onChange={(e) => setDCity(e.target.value)}
                 value={dCity}
+                onClick={() => setDDropdown(true)}
               ></input>
             </div>
             <div className={styles.dropdown}>
@@ -186,7 +223,7 @@ const Display = () => {
               {dCityQuery.isSuccess &&
                 Object.values(dCityQuery.data).map((item) => {
                   return (
-                    <div onClick={() => setDLocation(item.iataCode)}>
+                    <div onClick={() => selectDLocation(item.iataCode)}>
                       {item.name} {item.subType} {item.iataCode}
                     </div>
                   );

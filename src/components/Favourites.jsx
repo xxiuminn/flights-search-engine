@@ -1,78 +1,31 @@
-import React, { useState } from "react";
-import styles from "./CheapestFlights.module.css";
-import { useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import React from "react";
 
-const Favourites = (props) => {
-  console.log(props.savedFlights);
-
-  const [carrier, setCarrier] = useState("");
-  const [departure, setDeparture] = useState("");
-  const [arrival, setArrival] = useState("");
-  const [duration, setDuration] = useState("");
-  const [stops, setStops] = useState("");
-  const [price, setPrice] = useState("");
-  const [currency, setCurrency] = useState("");
-  const [oneWay, setOneWay] = useState("");
-
-  const addSave = async () => {
-    const res = await fetch(import.meta.env.VITE_AIRTABLE, {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer " + import.meta.env.VITE_ATTOKEN,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        records: [
-          {
-            fields: {
-              duration: duration,
-              departure: departure,
-              carrier: carrier,
-              stops: stops,
-              price: price,
-              arrival: arrival,
-              oneway: oneWay,
-              currency: currency,
-            },
-          },
-        ],
-      }),
-    });
+const Favourites = () => {
+  // fetch saved flights
+  const getSavedFlights = async () => {
+    const res = await fetch(
+      import.meta.env.VITE_AIRTABLE + "?maxRecords=100&view=Grid%20view",
+      {
+        headers: {
+          Authorization: "Bearer " + import.meta.env.VITE_ATTOKEN,
+        },
+      }
+    );
     if (!res.ok) {
-      throw new Error("add new users error");
+      throw new Error("error fetching saved flights");
     }
+    const data = await res.json();
+    console.log(data);
+    return data;
   };
 
-  const mutation = useMutation({
-    mutationFn: addSave,
-    onSuccess: () => {
-      queryClient.invalidateQueries(["saveflight"]);
-    },
+  const savedFlightsQuery = useQuery({
+    queryKey: ["savedflights"],
+    queryFn: getSavedFlights,
   });
 
-  return (
-    <>
-      {/* <div className={styles.carrier}>
-        {props.savedFlights[0].itineraries[0].segments[0].carrierCode}
-      </div>
-      <div className={styles.tofro}>
-        {props.savedFlights[0].itineraries[0].segments[0].departure.at
-          .split("T")[1]
-          .slice(0, 5)}{" "}
-        -{" "}
-        {props.savedFlights[0].itineraries[0].segments[0].arrival.at
-          .split("T")[1]
-          .slice(0, 5)}
-      </div>
-      <div className={styles.duration}>
-        {props.savedFlights[0].itineraries[0].duration.slice(2)}
-      </div>
-      <div className={styles.stops}>
-        {props.savedFlights[0].itineraries[0].segments[0].numberOfStops}
-      </div> */}
-      <p>{JSON.stringify(props.savedFlights)}</p>
-    </>
-  );
+  return <div></div>;
 };
 
 export default Favourites;

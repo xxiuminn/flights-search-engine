@@ -3,8 +3,9 @@ import styles from "./CheapestFlights.module.css";
 import React, { useState } from "react";
 
 const CheapestFlightsCard = (props) => {
-  const { item, savedFlights, oLocation, dLocation } = props;
+  const { item, oLocation, dLocation } = props;
   const [isSaved, setIsSaved] = useState(false);
+  // const [savedFlights, setSavedFlights] = useState("");
 
   //add saved flights
   const addSave = async () => {
@@ -37,7 +38,7 @@ const CheapestFlightsCard = (props) => {
       }),
     });
     if (!res.ok) {
-      throw new Error("add new users error");
+      throw new Error("error saving flights");
     }
   };
 
@@ -48,8 +49,6 @@ const CheapestFlightsCard = (props) => {
       queryClient.invalidateQueries(["saveflight"]);
     },
   });
-
-  // fetch saved flights
 
   return (
     <>

@@ -3,24 +3,25 @@ import Flight from "./Flight";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import styles from "./CheapestFlights.module.css";
 import CheapestFlightsCard from "./CheapestFlightsCard";
+import Favourites from "./Favourites";
 
 const CheapestFlights = (props) => {
   const queryClient = useQueryClient();
   const [data, setData] = useState([]);
-  const [savedFlights, setSavedFlights] = useState([
-    {
-      carrier: "",
-      dep: "",
-      arr: "",
-      duration: "",
-      stops: "",
-      currency: "",
-      oneWay: "",
-      price: "",
-    },
-  ]);
+  // const [savedFlights, setSavedFlights] = useState([
+  //   {
+  //     carrier: "",
+  //     dep: "",
+  //     arr: "",
+  //     duration: "",
+  //     stops: "",
+  //     currency: "",
+  //     oneWay: "",
+  //     price: "",
+  //   },
+  // ]);
 
-  console.log(savedFlights);
+  // console.log(savedFlights);
   // let tempURL = `originLocationCode=${props.oLocation}&destinationLocationCode=${props.dLocation}&departureDate=${props.depDate}&returnDate=${props.retDate}&adults=${props.adults}&travelClass=${props.travelClass}&nonStop=${props.stops}&currencyCode=${props.currency}&max=5`;
 
   //fetch flight results
@@ -69,10 +70,11 @@ const CheapestFlights = (props) => {
               <CheapestFlightsCard
                 item={item}
                 // handleSave={props.saved}
-                savedFlights={savedFlights}
+                // savedFlights={savedFlights}
                 oLocation={props.oLocation}
                 dLocation={props.dLocation}
               ></CheapestFlightsCard>
+              <Favourites />
             </>
           );
         })}

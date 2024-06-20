@@ -139,13 +139,7 @@ const CheapestFlightsCard = (props) => {
               Save
             </button>
           ) : (
-            <button
-              className={styles.buttonSaved}
-              // onClick={() => clickSave(item)}
-              // onClick={mutation.mutate}
-            >
-              Saved
-            </button>
+            <button className={styles.buttonSaved}>Saved</button>
           )}
         </div>
       </div>

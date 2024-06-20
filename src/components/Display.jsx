@@ -109,7 +109,7 @@ const Display = () => {
 
   const oautofill = async () => {
     setOSuggestion(false);
-    let tempURL = `keyword=${oCity}&max=10&include=AIRPORTS`;
+    let tempURL = `keyword=${oCity}&max=20&include=AIRPORTS`;
     const res = await fetch(import.meta.env.VITE_CITIES + tempURL, {
       headers: {
         "Content-Type": "application/json",
@@ -117,11 +117,19 @@ const Display = () => {
       },
     });
     if (!res.ok) {
-      throw new Error("fetch oautofill error");
+      throw new Error("fetch dautofill error");
     }
     console.log(oCity);
     const data = await res.json();
-    return data.data[0];
+    console.log(data.data);
+    // need to autofill input to country
+    //put here to ensure that the data is ready.
+    for (let item of data.data) {
+      if (oLocation === item.iataCode) {
+        return setOCity(item.name);
+      }
+    }
+    return data.data;
   };
 
   const oautofillQuery = useQuery({
@@ -145,6 +153,13 @@ const Display = () => {
     console.log(dCity);
     const data = await res.json();
     console.log(data.data);
+    // need to autofill input to country
+    //put here to ensure that the data is ready.
+    for (let item of data.data) {
+      if (dLocation === item.iataCode) {
+        return setDCity(item.name);
+      }
+    }
     return data.data;
   };
 
@@ -177,19 +192,12 @@ const Display = () => {
   };
 
   const selectDLocation = (code) => {
+    //to trigger the fetch for city suggestions
     setDSuggestion(true);
-    console.log(dautofillQuery.data);
-    console.log(code);
+    //pass the selected iata code to fetch for the flight results
     setDLocation(code);
+    //to close the drop down
     setDDropdown(false);
-    // need to autofill input to country
-    for (let item of dautofillQuery.data) {
-      if (code === item.iataCode) {
-        console.log(item.iataCode);
-        console.log(item.name);
-        return setDCity(item.name);
-      } else console.log(code);
-    }
   };
 
   return (

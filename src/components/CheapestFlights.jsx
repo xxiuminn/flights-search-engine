@@ -45,6 +45,7 @@ const CheapestFlights = (props) => {
       {query.isFetching && <p>loading...</p>}
       {query.isSuccess &&
         data.map((item) => {
+          console.log(item);
           return (
             <>
               <CheapestFlightsCard

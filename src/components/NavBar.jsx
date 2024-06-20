@@ -8,7 +8,7 @@ const NavBar = () => {
       <div className={styles.navbar}>
         <div className={styles.brand}>
           {/* <div className={styles.logo}></div> */}
-          <h2>Googly Flights</h2>
+          <h2>GOOGLY FLIGHTS</h2>
         </div>
         <nav>
           <ul>

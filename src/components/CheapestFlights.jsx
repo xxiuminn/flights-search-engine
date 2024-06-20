@@ -12,6 +12,11 @@ const CheapestFlights = (props) => {
   let tempURL = `originLocationCode=${props.oLocation}&destinationLocationCode=${props.dLocation}&departureDate=${props.depDate}&returnDate=${props.retDate}&adults=${props.adults}&travelClass=${props.travelClass}&nonStop=${props.stops}&currencyCode=${props.currency}&max=10`;
 
   const fetchData = async () => {
+    setData([]);
+    console.log(props.dLocation);
+    console.log(props.oLocation);
+    console.log(props.depDate);
+    console.log(props.retDate);
     const res = await fetch(import.meta.env.VITE_BASEURL + tempURL, {
       headers: {
         "Content-Type": "application/json",
@@ -39,7 +44,7 @@ const CheapestFlights = (props) => {
     <div className={styles.searchResult}>
       {query.isFetching && <p>loading...</p>}
       {query.isSuccess &&
-        query.data.map((item) => {
+        data.map((item) => {
           return (
             <>
               <CheapestFlightsCard

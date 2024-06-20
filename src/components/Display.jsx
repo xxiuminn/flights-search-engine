@@ -24,6 +24,8 @@ const Display = () => {
   const [enableClick, setEnableClick] = useState(false);
   const [oDropdown, setODropdown] = useState(false);
   const [dDropdown, setDDropdown] = useState(false);
+  const [oSuggestion, setOSuggestion] = useState(false);
+  const [dSuggestion, setDSuggestion] = useState(false);
 
   //fetch token
   const fetchToken = async () => {
@@ -55,7 +57,7 @@ const Display = () => {
     fetchToken();
   }, []);
 
-  //fetch departing airport by city search
+  //1. fetch departing airport suggestions by city search
 
   const fetchOCity = async () => {
     let tempURL = `keyword=${oCity}&max=5&include=AIRPORTS`;
@@ -76,10 +78,10 @@ const Display = () => {
   const oCityQuery = useQuery({
     queryKey: ["ocity", oCity],
     queryFn: fetchOCity,
-    enabled: false,
+    enabled: oDropdown,
   });
 
-  //fetch arrival airport by city search
+  //1. fetch arrival airport suggestions by city search
 
   const fetchDCity = async () => {
     let tempURL = `keyword=${dCity}&max=5&include=AIRPORTS`;
@@ -99,13 +101,15 @@ const Display = () => {
   const dCityQuery = useQuery({
     queryKey: ["dcity", dCity],
     queryFn: fetchDCity,
-    enabled: false,
+    enabled: dDropdown,
   });
 
-  // fetch cities for autofill
+  // fetch cities for autofill only when suggestion dropped down is clicked.
+  // flaws: if don't click won't be able to get any results.
 
   const oautofill = async () => {
-    let tempURL = `keyword=${oCity}&max=1&include=AIRPORTS`;
+    setOSuggestion(false);
+    let tempURL = `keyword=${oCity}&max=10&include=AIRPORTS`;
     const res = await fetch(import.meta.env.VITE_CITIES + tempURL, {
       headers: {
         "Content-Type": "application/json",
@@ -121,13 +125,14 @@ const Display = () => {
   };
 
   const oautofillQuery = useQuery({
-    queryKey: ["oautofill", oCity],
+    queryKey: ["oautofill"],
     queryFn: oautofill,
-    enabled: false,
+    enabled: oSuggestion,
   });
 
   const dautofill = async () => {
-    let tempURL = `keyword=${dCity}&max=1&include=AIRPORTS`;
+    setDSuggestion(false);
+    let tempURL = `keyword=${dCity}&max=20&include=AIRPORTS`;
     const res = await fetch(import.meta.env.VITE_CITIES + tempURL, {
       headers: {
         "Content-Type": "application/json",
@@ -137,15 +142,16 @@ const Display = () => {
     if (!res.ok) {
       throw new Error("fetch dautofill error");
     }
-    console.log(oCity);
+    console.log(dCity);
     const data = await res.json();
-    return data.data[0];
+    console.log(data.data);
+    return data.data;
   };
 
   const dautofillQuery = useQuery({
-    queryKey: ["dautofill", oCity],
+    queryKey: ["dautofill"],
     queryFn: dautofill,
-    enabled: false,
+    enabled: dSuggestion,
   });
 
   //search click which will fetch results
@@ -153,24 +159,36 @@ const Display = () => {
     setEnableClick(!enableClick);
   };
 
-  //click on drop down option (iataCode) => returns city name.
+  // 2. click on drop down option (iataCode) => returns iataCode to then fetch results.
   const selectOLocation = (code) => {
+    console.log(code);
+    setOSuggestion(true);
     setOLocation(code);
     setODropdown(false);
+
     // need to autofill input to country
-    if (code === oautofillQuery.data.iataCode) {
-      console.log(oautofillQuery.data.name);
-      return setOCity(oautofillQuery.data.name);
+    for (let item of oautofillQuery.data) {
+      if (code === item.iataCode) {
+        console.log(item.iataCode);
+        console.log(item.name);
+        return setOCity(item.name);
+      } else console.log(code);
     }
   };
 
   const selectDLocation = (code) => {
+    setDSuggestion(true);
+    console.log(dautofillQuery.data);
+    console.log(code);
     setDLocation(code);
     setDDropdown(false);
     // need to autofill input to country
-    if (code === dautofillQuery.data.iataCode) {
-      console.log(dautofillQuery.data.name);
-      return setDCity(dautofillQuery.data.name);
+    for (let item of dautofillQuery.data) {
+      if (code === item.iataCode) {
+        console.log(item.iataCode);
+        console.log(item.name);
+        return setDCity(item.name);
+      } else console.log(code);
     }
   };
 

@@ -26,7 +26,7 @@ const CheapestFlightsCard = (props) => {
                 .slice(0, 5),
               carrier: item.itineraries[0].segments[0].carrierCode,
               stops: `${item.itineraries[0].segments[0].numberOfStops}`,
-              price: item.price.base,
+              price: item.price.total,
               arrival: item.itineraries[0].segments[0].arrival.at
                 .split("T")[1]
                 .slice(0, 5),
@@ -88,7 +88,7 @@ const CheapestFlightsCard = (props) => {
         </div>
         <div className={styles.pricedetails}>
           <div>
-            {item.price.currency} ${item.price.base}
+            {item.price.currency} ${item.price.total}
           </div>
           <div>{item.oneWay ? "One Way" : "Round Trip"}</div>
 
@@ -105,7 +105,6 @@ const CheapestFlightsCard = (props) => {
               Saved
             </button>
           )}
-          <p>{JSON.stringify(isSaved)}</p>
         </div>
       </div>
     </>

@@ -28,16 +28,19 @@ const Favourites = () => {
   });
 
   return (
-    savedFlightsQuery.isSuccess &&
-    savedFlightsQuery.data.map((item) => {
-      return (
-        <SavedCard
-          className={styles.container}
-          item={item.fields}
-          id={item.id}
-        ></SavedCard>
-      );
-    })
+    <>
+      {savedFlightsQuery.isLoading && <p>Loading...</p>}
+      {savedFlightsQuery.isSuccess &&
+        savedFlightsQuery.data.map((item) => {
+          return (
+            <SavedCard
+              className={styles.container}
+              item={item.fields}
+              id={item.id}
+            ></SavedCard>
+          );
+        })}
+    </>
   );
 };
 

@@ -1,11 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import styles from "./CheapestFlights.module.css";
 import React, { useState } from "react";
 
 const CheapestFlightsCard = (props) => {
+  const queryClient = useQueryClient();
   const { item, oLocation, dLocation } = props;
   const [isSaved, setIsSaved] = useState(false);
-  // const [savedFlights, setSavedFlights] = useState("");
 
   //add saved flights
   const addSave = async () => {
@@ -32,6 +32,8 @@ const CheapestFlightsCard = (props) => {
                 .slice(0, 5),
               oneWay: `${item.oneWay}`,
               currency: item.price.currency,
+              origin: item.itineraries[0].segments[0].departure.iataCode,
+              destination: item.itineraries[0].segments[0].arrival.iataCode,
             },
           },
         ],
@@ -77,7 +79,8 @@ const CheapestFlightsCard = (props) => {
           <div className={styles.flight}>
             <div className={styles.carrier}>Airline</div>
             <div className={styles.from}>
-              {oLocation} - {dLocation}
+              {item.itineraries[0].segments[0].departure.iataCode} -{" "}
+              {item.itineraries[0].segments[0].arrival.iataCode}
             </div>
             <div className={styles.duration}>Duration</div>
             <div className={styles.to}>Stops</div>

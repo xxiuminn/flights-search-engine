@@ -278,11 +278,7 @@ const Display = () => {
         currency={currency}
         enableClick={enableClick}
         handleSearch={handleSearch}
-        // saved={saved}
-        // savedFlights={savedFlights}
       />
-      {/* 
-      <Favourites savedFlights={savedFlights} /> */}
     </>
   );
 };

@@ -1,5 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import React, { useState } from "react";
+import SavedCard from "./SavedCard";
+import styles from "./CheapestFlights.module.css";
 
 const Favourites = () => {
   // fetch saved flights
@@ -16,8 +18,8 @@ const Favourites = () => {
       throw new Error("error fetching saved flights");
     }
     const data = await res.json();
-    console.log(data);
-    return data;
+    console.log(data.records);
+    return data.records;
   };
 
   const savedFlightsQuery = useQuery({
@@ -25,7 +27,18 @@ const Favourites = () => {
     queryFn: getSavedFlights,
   });
 
-  return <div></div>;
+  return (
+    savedFlightsQuery.isSuccess &&
+    savedFlightsQuery.data.map((item) => {
+      return (
+        <SavedCard
+          className={styles.container}
+          item={item.fields}
+          id={item.id}
+        ></SavedCard>
+      );
+    })
+  );
 };
 
 export default Favourites;

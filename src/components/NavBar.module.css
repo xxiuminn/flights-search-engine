@@ -1,49 +1,72 @@
-.navbar {
-  height: 3rem;
-  background-color: rgb(255, 255, 255);
+.bg {
+  background-color: #0c1f3a;
 }
 
-.navbar nav {
-  height: 100%;
+.navbar {
+  height: 10rem;
+  display: flex;
+  color: white;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  margin-left: 10em;
+  margin-right: 10em;
 }
+
+.brand {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 1em;
+}
+
+/* .logo {
+  transform: scale(0.5);
+  height: 70px;
+  width: 130px;
+  background-image: url(../../src/assets/logo.png);
+  margin-right: 1em;
+  object-fit: cover;
+} */
+
+/* .navbar nav {
+  height: 100%;
+} */
 
 .navbar ul {
   height: 100%;
   list-style: none;
   display: flex;
   padding: 0;
-  margin-top: 1em;
   align-items: center;
   justify-content: flex-start;
 }
 
-.navbar li {
+.navbar a {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 1rem;
-  width: 4rem;
+  margin-right: 0.4em;
   border-radius: 2em;
   border: solid;
-  border-width: 0.2em;
+  border-width: 0.1em;
   border-color: rgb(205, 205, 205);
-  padding: 0.2em 2em 0.2em 2em;
+  padding: 0.4em 2em 0.4em 2em;
+  background-color: #0c1f3a;
 }
 
 .navbar a {
-  color: #000000;
+  color: white;
   text-decoration: none;
 }
 
-.navbar li:hover,
-.navbar li:active {
-  background-color: #4285f4;
-  border-color: #4285f4;
+.navbar a:hover {
+  background-color: #25364e;
+  border-color: #2c405b;
 }
 
-/* .navbar a:hover,
 .navbar a:active,
 .navbar a.active {
-  color: white;
-  padding-bottom: 0.25rem;
-} */
+  border-color: #2960db;
+  background-color: #2960db;
+}

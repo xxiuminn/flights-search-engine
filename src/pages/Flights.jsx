@@ -7,9 +7,11 @@ import App from "../App";
 
 const Flights = () => {
   return (
-    // <QueryClientProvider client={queryClient}>
-    <Display />
-    // </QueryClientProvider>
+    <>
+      {/* <QueryClientProvider client={queryClient}> */}
+      <Display />
+      {/* </QueryClientProvider> */}
+    </>
   );
 };
 

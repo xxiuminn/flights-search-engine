@@ -35,8 +35,6 @@ const CheapestFlights = (props) => {
     enabled: props.enableClick,
   });
 
-  console.log(query.data);
-
   return (
     <div className={styles.searchResult}>
       {query.isFetching && <p>loading...</p>}

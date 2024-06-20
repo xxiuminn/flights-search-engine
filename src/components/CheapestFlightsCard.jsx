@@ -105,9 +105,9 @@ const CheapestFlightsCard = (props) => {
               Saved
             </button>
           )}
+          <p>{JSON.stringify(isSaved)}</p>
         </div>
       </div>
-      <p>{JSON.stringify(props.savedFlights)}</p>
     </>
   );
 };

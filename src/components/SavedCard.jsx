@@ -50,6 +50,23 @@ const SavedCard = (props) => {
               <div className={styles.duration}>Duration</div>
               <div className={styles.to}>Stops</div>
             </div>
+
+            <div className={styles.flight}>
+              <div className={styles.carrier}>{props.item.carrier1}</div>
+              <div className={styles.tofro}>
+                {props.item.departure1} - {props.item.arrival1}
+              </div>
+              <div className={styles.duration}>{props.item.duration1}</div>
+              <div className={styles.stops}>{props.item.stops1}</div>
+            </div>
+            <div className={styles.flight}>
+              <div className={styles.carrier}>Airline</div>
+              <div className={styles.from}>
+                {props.item.origin1} - {props.item.destination1}
+              </div>
+              <div className={styles.duration}>Duration</div>
+              <div className={styles.to}>Stops</div>
+            </div>
           </div>
           <div className={styles.pricedetails}>
             <div>

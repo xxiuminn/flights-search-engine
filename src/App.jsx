@@ -16,8 +16,8 @@ function App() {
         <NavBar />
         <Suspense fallback={<p>Loading...</p>}>
           <Routes>
-            <Route path="/" element={<Navigate replace to="/main" />} />
-            <Route path="main" element={<Main />} />
+            <Route path="/" element={<Navigate replace to="/flights" />} />
+            {/* <Route path="main" element={<Main />} /> */}
             <Route path="flights" element={<Flights />} />
             <Route path="*" element={<Main />} />
             <Route path="saved" element={<Saved />} />

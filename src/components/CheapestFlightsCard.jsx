@@ -34,6 +34,19 @@ const CheapestFlightsCard = (props) => {
               currency: item.price.currency,
               origin: item.itineraries[0].segments[0].departure.iataCode,
               destination: item.itineraries[0].segments[0].arrival.iataCode,
+
+              duration1: item.itineraries[1].duration.slice(2),
+              departure1: item.itineraries[1].segments[0].departure.at
+                .split("T")[1]
+                .slice(0, 5),
+              carrier1: item.itineraries[1].segments[0].carrierCode,
+              stops1: `${item.itineraries[1].segments[0].numberOfStops}`,
+              oneWay1: `${item.oneWay}`,
+              origin1: item.itineraries[1].segments[0].departure.iataCode,
+              destination1: item.itineraries[1].segments[0].arrival.iataCode,
+              arrival1: item.itineraries[1].segments[0].arrival.at
+                .split("T")[1]
+                .slice(0, 5),
             },
           },
         ],
@@ -81,6 +94,35 @@ const CheapestFlightsCard = (props) => {
             <div className={styles.from}>
               {item.itineraries[0].segments[0].departure.iataCode} -{" "}
               {item.itineraries[0].segments[0].arrival.iataCode}
+            </div>
+            <div className={styles.duration}>Duration</div>
+            <div className={styles.to}>Stops</div>
+          </div>
+          <div className={styles.flight}>
+            <div className={styles.carrier}>
+              {item.itineraries[1].segments[0].carrierCode}
+            </div>
+            <div className={styles.tofro}>
+              {item.itineraries[1].segments[0].departure.at
+                .split("T")[1]
+                .slice(0, 5)}{" "}
+              -{" "}
+              {item.itineraries[1].segments[0].arrival.at
+                .split("T")[1]
+                .slice(0, 5)}
+            </div>
+            <div className={styles.duration}>
+              {item.itineraries[1].duration.slice(2)}
+            </div>
+            <div className={styles.stops}>
+              {item.itineraries[1].segments[0].numberOfStops}
+            </div>
+          </div>
+          <div className={styles.flight}>
+            <div className={styles.carrier}>Airline</div>
+            <div className={styles.from}>
+              {item.itineraries[1].segments[0].departure.iataCode} -{" "}
+              {item.itineraries[1].segments[0].arrival.iataCode}
             </div>
             <div className={styles.duration}>Duration</div>
             <div className={styles.to}>Stops</div>

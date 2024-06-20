@@ -12,14 +12,14 @@ const NavBar = () => {
         </div>
         <nav>
           <ul>
-            <li>
+            {/* <li>
               <NavLink
                 to="/main"
                 className={(navData) => (navData.isActive ? styles.active : "")}
               >
                 Home
               </NavLink>
-            </li>
+            </li> */}
             <li>
               <NavLink
                 to="/flights"

@@ -20,19 +20,6 @@
   margin-bottom: 1em;
 }
 
-/* .logo {
-  transform: scale(0.5);
-  height: 70px;
-  width: 130px;
-  background-image: url(../../src/assets/logo.png);
-  margin-right: 1em;
-  object-fit: cover;
-} */
-
-/* .navbar nav {
-  height: 100%;
-} */
-
 .navbar ul {
   height: 100%;
   list-style: none;

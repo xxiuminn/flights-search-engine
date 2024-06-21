@@ -4,12 +4,11 @@ import React, { useState } from "react";
 
 const CheapestFlightsCard = (props) => {
   const queryClient = useQueryClient();
-  const { item, oLocation, dLocation } = props;
+  const { item } = props;
   const [isSaved, setIsSaved] = useState(false);
 
   //add saved flights
   const addSave = async () => {
-    console.log("posting");
     const res = await fetch(import.meta.env.VITE_AIRTABLE, {
       method: "POST",
       headers: {

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import CheapestFlights from "./CheapestFlights";
 import { useQuery } from "@tanstack/react-query";
 import styles from "./Display.module.css";
-import Favourites from "./Favourites";
 
 const Display = () => {
   const date = new Date();
@@ -70,7 +69,6 @@ const Display = () => {
     if (!res.ok) {
       throw new Error("fetch o city error");
     }
-    console.log(oCity);
     const data = await res.json();
     return data.included.airports;
   };
@@ -119,9 +117,7 @@ const Display = () => {
     if (!res.ok) {
       throw new Error("fetch dautofill error");
     }
-    console.log(oCity);
     const data = await res.json();
-    console.log(data.data);
     // need to autofill input to country
     //put here to ensure that the data is ready.
     for (let item of data.data) {
@@ -150,9 +146,7 @@ const Display = () => {
     if (!res.ok) {
       throw new Error("fetch dautofill error");
     }
-    console.log(dCity);
     const data = await res.json();
-    console.log(data.data);
     // need to autofill input to country
     //put here to ensure that the data is ready.
     for (let item of data.data) {
@@ -176,7 +170,6 @@ const Display = () => {
 
   // 2. click on drop down option (iataCode) => returns iataCode to then fetch results.
   const selectOLocation = (code) => {
-    console.log(code);
     setOSuggestion(true);
     setOLocation(code);
     setODropdown(false);
@@ -184,10 +177,8 @@ const Display = () => {
     // need to autofill input to country
     for (let item of oautofillQuery.data) {
       if (code === item.iataCode) {
-        console.log(item.iataCode);
-        console.log(item.name);
         return setOCity(item.name);
-      } else console.log(code);
+      }
     }
   };
 

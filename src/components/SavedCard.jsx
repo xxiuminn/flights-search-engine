@@ -6,8 +6,6 @@ const SavedCard = (props) => {
   const queryClient = useQueryClient();
   //remove saved flights
   const removeSavedFlights = async () => {
-    console.log(props.id);
-    console.log("deleted");
     const res = await fetch(import.meta.env.VITE_AIRTABLE + "/" + props.id, {
       method: "DELETE",
       headers: {
@@ -24,7 +22,6 @@ const SavedCard = (props) => {
     mutationFn: removeSavedFlights,
     onSuccess: () => {
       // to change color & change to save instead of saved
-      // setIsSaved(!isSaved);
       queryClient.invalidateQueries(["removeflight"]);
     },
   });

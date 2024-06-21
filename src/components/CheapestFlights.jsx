@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import React, { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import styles from "./CheapestFlights.module.css";
 import CheapestFlightsCard from "./CheapestFlightsCard";
 
@@ -12,10 +12,6 @@ const CheapestFlights = (props) => {
 
   const fetchData = async () => {
     setData([]);
-    // console.log(props.dLocation);
-    // console.log(props.oLocation);
-    // console.log(props.depDate);
-    // console.log(props.retDate);
     const res = await fetch(import.meta.env.VITE_BASEURL + tempURL, {
       headers: {
         "Content-Type": "application/json",
@@ -27,8 +23,6 @@ const CheapestFlights = (props) => {
     }
     const data = await res.json();
     setData(data.data);
-    // console.log(data.data);
-    // console.log(data);
     props.handleSearch();
     return data.data;
   };
@@ -44,13 +38,10 @@ const CheapestFlights = (props) => {
       {query.isFetching && <p>loading...</p>}
       {query.isSuccess &&
         data.map((item) => {
-          console.log(item);
           return (
             <>
               <CheapestFlightsCard
                 item={item}
-                // handleSave={props.saved}
-                // savedFlights={savedFlights}
                 oLocation={props.oLocation}
                 dLocation={props.dLocation}
               ></CheapestFlightsCard>

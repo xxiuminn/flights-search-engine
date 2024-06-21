@@ -1,5 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import React from "react";
 import SavedCard from "./SavedCard";
 import styles from "./CheapestFlights.module.css";
 
@@ -18,7 +18,6 @@ const Favourites = () => {
       throw new Error("error fetching saved flights");
     }
     const data = await res.json();
-    console.log(data.records);
     return data.records;
   };
 

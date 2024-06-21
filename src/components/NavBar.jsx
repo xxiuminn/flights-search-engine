@@ -7,19 +7,10 @@ const NavBar = () => {
     <header className={styles.bg}>
       <div className={styles.navbar}>
         <div className={styles.brand}>
-          {/* <div className={styles.logo}></div> */}
           <h2>GOOGLY FLIGHTS</h2>
         </div>
         <nav>
           <ul>
-            {/* <li>
-              <NavLink
-                to="/main"
-                className={(navData) => (navData.isActive ? styles.active : "")}
-              >
-                Home
-              </NavLink>
-            </li> */}
             <li>
               <NavLink
                 to="/flights"

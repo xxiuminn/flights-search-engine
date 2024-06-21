@@ -2,21 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import styles from "./CheapestFlights.module.css";
 import CheapestFlightsCard from "./CheapestFlightsCard";
-import Favourites from "./Favourites";
 
 const CheapestFlights = (props) => {
   const queryClient = useQueryClient();
   const [data, setData] = useState([]);
 
   //fetch flight results
-  let tempURL = `originLocationCode=${props.oLocation}&destinationLocationCode=${props.dLocation}&departureDate=${props.depDate}&returnDate=${props.retDate}&adults=${props.adults}&travelClass=${props.travelClass}&nonStop=${props.stops}&currencyCode=${props.currency}&max=10`;
+  const tempURL = `originLocationCode=${props.oLocation}&destinationLocationCode=${props.dLocation}&departureDate=${props.depDate}&returnDate=${props.retDate}&adults=${props.adults}&travelClass=${props.travelClass}&nonStop=${props.stops}&currencyCode=${props.currency}&max=10`;
 
   const fetchData = async () => {
     setData([]);
-    console.log(props.dLocation);
-    console.log(props.oLocation);
-    console.log(props.depDate);
-    console.log(props.retDate);
+    // console.log(props.dLocation);
+    // console.log(props.oLocation);
+    // console.log(props.depDate);
+    // console.log(props.retDate);
     const res = await fetch(import.meta.env.VITE_BASEURL + tempURL, {
       headers: {
         "Content-Type": "application/json",
@@ -28,8 +27,8 @@ const CheapestFlights = (props) => {
     }
     const data = await res.json();
     setData(data.data);
-    console.log(data.data);
-    console.log(data);
+    // console.log(data.data);
+    // console.log(data);
     props.handleSearch();
     return data.data;
   };
